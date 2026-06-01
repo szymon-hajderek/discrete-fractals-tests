@@ -1,0 +1,14 @@
+# C++ Hasher
+calc_hash
+
+# Generated test inputs (keep manuals)
+tests/*.n
+!tests/*manual.n
+tests/*.stdin
+!tests/*manual.stdin
+tests/*.err
+
+# Python Caches
+__pycache__/
+*.py[cod]
+*$py.class
