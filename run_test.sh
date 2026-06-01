@@ -24,10 +24,15 @@ fi
 # Read the exact text into $n
 IFS= read -r -d '' n < "$SCRIPT_DIR/tests/${test_name}.n"
 
-"$prog" "$n" < "$SCRIPT_DIR/tests/${test_name}.stdin"
-
+stats_file=$(mktemp)
+/usr/bin/time -q -f "%e %M" -o "$stats_file" "$prog" "$n" < "$SCRIPT_DIR/tests/${test_name}.stdin"
 exit_code=$?
 
+read elapsed_sec peak_kb < "$stats_file"
+echo -n "Time: $elapsed_sec s | Mem:  $peak_kb KiB" >&2
+
 if [[ $exit_code != 0 ]]; then
-  printf "PROGRAM FAILED WITH EXIT CODE: $exit_code\n"
+  echo " | PROGRAM FAILED WITH EXIT CODE: $exit_code\n" >&2
+else
+  echo ""
 fi
